@@ -1,0 +1,101 @@
+#macro pageNav(pageInfo, prevText, nextText, prefix)
+<ol class="page-navigator">
+    #if(pageInfo.hasPrevPage)
+    <li class="prev"><a href="${prefix}/${pageInfo.prevPage}">${prevText}</a></li>
+    #end
+
+    #if(pageInfo.pages > 6)
+    <li #if(pageInfo.pageNum== 1) class="current" #end><a href="${prefix}/1">1</a></li>
+
+    #if(pageInfo.pageNum > 5)
+    <li><span>...</span></a></li>
+    #end
+
+    #for(navIndex : pageInfo.navPageNums)
+    #if(pageInfo.pageNum - navIndex < 4 || pageInfo.pageNum + 4 < navIndex)
+    #if(navIndex > 1 && navIndex < pageInfo.pages)
+    <li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="/page/${navIndex}">${navIndex}</a></li>
+    #end
+    #end
+    #end
+
+    #if(pageInfo.pages - pageInfo.pageNum > 5)
+    <li><span>...</span></a></li>
+    #end
+
+    <li #if(pageInfo.pageNum== pageInfo.pages) class="current" #end><a href="${prefix}/${pageInfo.pages}">${pageInfo.pages}</a></li>
+    #else
+    #for(navIndex : pageInfo.navPageNums)
+    <li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="/page/${navIndex}">${navIndex}</a></li>
+    #end
+    #end
+
+    #if(pageInfo.hasNextPage)
+    <li class="next"><a href="${prefix}/${pageInfo.nextPage}">${nextText}</a></li>
+    #end
+</ol>
+#end
+
+#macro search(pageInfo, prevText, nextText, prefix)
+<ol class="page-navigator">
+    #if(pageInfo.hasPrevPage)
+    <li class="prev"><a href="${prefix}/${pageInfo.prevPage}">${prevText}</a></li>
+    #end
+
+    #if(pageInfo.pages > 6)
+    <li #if(pageInfo.pageNum== 1) class="current" #end><a href="${prefix}/1">1</a></li>
+
+    #if(pageInfo.pageNum > 5)
+    <li><span>...</span></a></li>
+    #end
+
+    #for(navIndex : pageInfo.navPageNums)
+    #if(pageInfo.pageNum - navIndex < 4 || pageInfo.pageNum + 4 < navIndex)
+    #if(navIndex > 1 && navIndex < pageInfo.pages)
+    <li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="${prefix}/${navIndex}">${navIndex}</a></li>
+    #end
+    #end
+    #end
+
+    #if(pageInfo.pages - pageInfo.pageNum > 5)
+    <li><span>...</span></a></li>
+    #end
+
+    <li #if(pageInfo.pageNum== pageInfo.pages) class="current" #end><a href="${prefix}/${pageInfo.pages}">${pageInfo.pages}</a></li>
+    #else
+    #for(navIndex : pageInfo.navPageNums)
+    <li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="${prefix}/${navIndex}">${navIndex}</a></li>
+    #end
+    #end
+
+    #if(pageInfo.hasNextPage)
+    <li class="next"><a href="${prefix}/${pageInfo.nextPage}">${nextText}</a></li>
+    #end
+</ol>
+#end
+
+#macro pageAdminNav(pageInfo)
+<div class="clearfix"></div>
+<ul class="pagination m-b-5 pull-right">
+    #if(pageInfo.hasPrevPage)
+    <li>
+        <a href="?page=${pageInfo.prevPage}" aria-label="Previous">
+            <i class="fa fa-angle-left"></i>&nbsp;上一页
+        </a>
+    </li>
+    #end
+
+    #for(nav : pageInfo.navPageNums)
+    <li #if(nav== pageInfo.pageNum) class="active" #end><a href="?page=${nav}">${nav}</a></li>
+    #end
+
+    #if(pageInfo.hasNextPage)
+    <li>
+        <a href="?page=${pageInfo.nextPage}" aria-label="Next">
+            下一页&nbsp;<i class="fa fa-angle-right"></i>
+        </a>
+    </li>
+    #end
+    <li><span>共${pageInfo.pages}页</span></li>
+</ul>
+#end

@@ -1,0 +1,142 @@
+<script type="text/javascript">
+(function () {
+    window.TaleComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+            return el;
+        },
+        reply : function (cid, coid) {
+            var comment = this.dom(cid),
+                parent = comment.parentNode,
+                response = this.dom('respond-post-' + cid),
+                input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+            if (null == input) {
+                input = this.create('input', {
+                    'type': 'hidden',
+                    'name': 'parent',
+                    'id': 'comment-parent'
+                });
+                form.appendChild(input);
+            }
+            input.setAttribute('value', coid);
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id': 'comment-form-place-holder'
+                });
+                response.parentNode.insertBefore(holder, response);
+            }
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+            return false;
+        },
+        cancelReply: function(cid) {
+            try {
+                var response = this.dom('respond-post-' + cid),
+                    holder = this.dom('comment-form-place-holder'),
+                    input = this.dom('comment-parent');
+                if (null != input) {
+                    input.parentNode.removeChild(input);
+                }
+                if (null == holder) {
+                    return true;
+                }
+                this.dom('cancel-comment-reply-link').style.display = 'none';
+                holder.parentNode.insertBefore(response, holder);
+                return false;
+            } catch (e) {
+                console.error('cancelReply Error!\n\n' + e);
+            }
+        },
+        subComment: function () {
+            $.ajax({
+                type: 'post',
+                url: '/comment',
+                data: $('#comment-form').serialize(),
+                async: false,
+                dataType: 'json',
+                success: function (result) {
+                    $('#comment-form input[name=coid]').val('');
+                    if (result && result.success) {
+                        window.location.reload();
+                    } else {
+                        if (result.msg) {
+                            alert(result.msg);
+                        }
+                    }
+                }
+            });
+            return false;
+        }
+    };
+})();
+function getCommentCookie(name){
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(decodeURI(arr[2]));
+    else
+        return null;
+}
+function addCommentInputValue() {
+    // 判断评论区是否已关闭
+    if (document.getElementById('author') != null && "undefined" != typeof document.getElementById('author') &&
+        document.getElementById('mail') != null && "undefined" != typeof document.getElementById('mail') &&
+        document.getElementById('url') != null && "undefined" != typeof document.getElementById('url')) {
+        if ("${login_user.uid}" > 0) {
+            document.getElementById('author').value = "${login_user.screen_name}";
+            document.getElementById('mail').value = "${login_user.email}";
+            document.getElementById('url').value = "${login_user.home_url}";
+        } else {
+            document.getElementById('author').value = getCommentCookie('tale_remember_author');
+            document.getElementById('mail').value = getCommentCookie('tale_remember_mail');
+            document.getElementById('url').value = getCommentCookie('tale_remember_url');
+        }
+    }
+}
+addCommentInputValue();
+
+function escape2Html(str) {
+    var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+    return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
+}
+// 将评论内容的 img 标签解析成 HTML 代码
+$('.comment-content-true').each(function(){
+    if ($(this).html().indexOf("&lt;img") > -1) {
+        $(this).html(escape2Html($(this).html()))
+    }
+});
+
+var owoTimer = null;
+function initOwO() {
+    if ($('.OwO').length == 1 && 'undefined' != typeof OwO && 'undefined' != typeof Expression) {
+        // 表情OwO代码开始，来自DIYgod
+        var OwOInstance = new OwO({
+            logo: Expression,
+            container: document.getElementsByClassName('OwO')[0],
+            target: document.getElementsByClassName('OwO-textarea')[0],
+            api: '/templates/themes/handsome/static/js/OwO.json',
+            position: 'down',
+            width: '100%',
+            maxHeight: '220px'
+        });
+        clearTimeout(owoTimer);
+    } else {
+        if ($('.OwO').length > 0 && $('.OwO-logo').length == 0) {
+            owoTimer = setTimeout("initOwO()", 500);
+        }
+    }
+}
+// 初始化 OwO 颜文字
+initOwO();
+
+</script>

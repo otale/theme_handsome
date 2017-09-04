@@ -1,0 +1,52 @@
+#include('./header.html', {title: '友情链接'})
+<!-- content -->
+<div id="content" class="app-content markdown-body">
+    <div id="loadingbar" class="butterbar hide">
+        <span class="bar"></span>
+    </div>
+    <a class="off-screen-toggle hide"></a>
+    <main class="app-content-body">
+        <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <div class="col">
+                <header id="small_widgets" class="bg-light lter b-b wrapper-md">
+                    <h1 class="entry-title m-n font-thin h3 text-black l-h">友情链接</h1>
+                </header>
+                <div class="wrapper-md">
+                    <!--博客文章样式-->
+                    <div id="postpage" class="blog-post">
+                        <article class="panel">
+                            <div id="post-content" class="wrapper-lg">
+                                <div class="entry-content l-h-2x">
+                                    <blockquote><h3>LINKS</h3></blockquote>
+                                    <ul class="flinks">
+                                        #for(link : links)
+                                        <li><a href="${link.slug}" target="_blank">${link.name}</a></li>
+                                        #end
+                                    </ul>
+
+                                    <blockquote><h3>链接须知</h3></blockquote>
+                                    <ul>
+                                        <li><p>请确定贵站可以稳定运营</p></li>
+                                        <li><p>原创博客、技术类博客优先</p></li>
+                                        <li><p>经常过来访问和评论，眼熟的</p></li>
+                                    </ul>
+
+                                    <blockquote><h3>友链信息</h3></blockquote>
+                                    <p>网站名称：<code>HongQuan'Blog</code></p>
+                                    <p>网站地址：<code>devtool.top</code></p>
+
+                                    <blockquote><h3>备注</h3></blockquote>
+                                    <p>友链交换请发送邮件到 <a href="hongquanpro@126.com" target="_blank">hongquanpro@126.com</a> ，由于评论区有较多无效链接会影响工作效率，望理解</p>
+                                    <p>我会不定时对无法访问的网址进行清理，请保证自己的链接长期有效。</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            #include('./right.html')
+        </div>
+    </main>
+</div>
+<!-- /content -->
+#include('./footer.html')
