@@ -5,27 +5,38 @@
 
 主题采用全站 Ajax 无刷新交互方式构建，在原版基础上删除了一些不必要的模块
 
-目前存在唯一的缺陷是评论无法回复，该功能后续会尽快添加
-
-另外基于 mysql 的版本优化了一些功能和添加的代码
-
-`resources/templates/comm/macros.html`
-
-优化了分别页面的输出逻辑
-
-`resources/templates/comm/tale_comment.html`
-
 增加颜文字和自定义表情的导入
-
-两个文件也在附件包中，可直接覆盖
 
 使用方法请参考[主题使用说明](https://github.com/otale/tale.git '主题使用说明')
 
-> 测试环境
+下载完主题之后请修改文件，为了解决分类页面下无法进行分页的BUG
 
-tale-mysql: https://github.com/otale/tale.git
+`resources/templates/comm/macros.html`
 
-tale-sqlite 由于手头环境问题未进行测试，在使用过程中发现问题请在 issues 中进行反馈
+原代码
+```
+#for(navIndex : pageInfo.navPageNums)
+<li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="/page/${navIndex}">${navIndex}</a></li>
+#end
+```
+
+替换后
+```
+#for(navIndex : pageInfo.navPageNums)
+#if(pageInfo.hasNextPage)
+<li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="/${prefix}/${navIndex}">${navIndex}</a></li>
+#else
+<li #if(pageInfo.pageNum== navIndex) class="current" #end><a href="/page/${navIndex}">${navIndex}</a></li>
+#end
+#end
+```
+
+
+> 已知问题
+
+* 目前存在唯一的缺陷是评论无法回复，该功能后续会尽快添加
+* 搜索好像并没有什么作用（与主题无关）
+* 调用随机文章会出现系统错误（与主题无关）
 
 > 预览
 
