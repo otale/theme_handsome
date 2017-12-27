@@ -9,7 +9,7 @@
     <h4 class="comments-title m-t-lg m-b">${comments_num('没有评论', '%d 条评论')}</h4>
     <!--评论列表-->
     <ol class="comment-list">
-        #for(comment : comments(6).list)
+        #for(comment : comments.rows)
         <li data-no-instant="" id="li-comment-${comment.coid}" class="comment-body comment-parent comment-odd">
             <div id="div-comment-${comment.coid}" class="comment-body">
                 <a class="pull-left thumb-sm">
